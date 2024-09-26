@@ -3,3 +3,7 @@
 /zukei/shapes/
 /data/
 /zukei/best_model.pth
+han/gat.py
+zukei/test.py
+han/base_gattn.py
+test.py
