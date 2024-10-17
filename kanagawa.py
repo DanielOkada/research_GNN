@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 df = pd.read_excel('data/明治35年神奈川.xlsx', sheet_name="明治35")
 
 # "・"を削除する(Graphvizでエラーが出る)
+df['會社名'] = df['會社名'].str.replace('・', '_', regex=False)
 df['役員名'] = df['役員名'].str.replace('・', '_', regex=False)
 
 edges_df = df[["會社名", "役員名"]].dropna()
@@ -13,11 +14,22 @@ edges = edges_df.itertuples(index=False)
 G = nx.Graph()
 G.add_edges_from(edges)
 
-# 1部グラフ作成
-yakuin_nodes = edges_df["役員名"].unique()
-G = nx.projected_graph(G, yakuin_nodes)
+# 2部グラフ保存
+# nx.write_graphml(G, 'data/kanagawa.graphml')
 
+# 1部グラフ作成
+# yakuin_nodes = edges_df["役員名"].unique()
+# G = nx.projected_graph(G, yakuin_nodes)
 nx.write_graphml(G, 'data/kanagawa_yakuin.graphml')
+
+exit(0)
+
+# 企業の1部グラフ作成
+kigyou_nodes = edges_df["會社名"].unique()
+G = nx.projected_graph(G, kigyou_nodes)
+nx.write_graphml(G, 'data/kanagawa_kigyou.graphml')
+
+
 
 # 最大連結成分のみでサブグラフを作成
 largest_cc = max(nx.connected_components(G), key=len)
